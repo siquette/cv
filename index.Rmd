@@ -1,0 +1,153 @@
+---
+title: "CV"
+author: rodrigo
+date: "`r Sys.Date()`"
+output:
+  pagedown::html_resume:
+    css: ['css/styles.css', 'resume']
+    # set it to true for a self-contained HTML page but it'll take longer to render
+    self_contained: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  results='asis', 
+  echo = FALSE
+)
+
+library(glue)
+library(tidyverse)
+
+# Set this to true to have links turned into footnotes at the end of the document
+PDF_EXPORT <- FALSE
+
+# Holds all the links that are inserted for placement at the end
+links <- c()
+
+source('parsing_functions.R') # Functions for building sections from CSV data
+source('common_variables.R')  # Small variables for non-csv data such as intro text
+
+# Load csv with position info
+position_data <- read_csv('positions.csv')
+```
+
+
+```{r}
+# When in export mode the little dots are unaligned, so fix that. 
+if(PDF_EXPORT){
+  cat("
+  <style>
+  :root{
+    --decorator-outer-offset-left: -6.5px;
+  }
+  </style>")
+}
+```
+
+
+Aside
+================================================================================
+
+
+![logo](https://i.pinimg.com/originals/99/1c/a8/991ca83f539ca62b6bd447ea77780a1c.gif){width=100%}
+
+
+
+Contato {#contact}
+--------------------------------------------------------------------------------
+
+
+- <i class="fa fa-envelope"></i> rodrigo.siquette@usp.br
+
+- <i class="fa fa-phone"></i> (19) 995504223
+
+
+
+Linguagem Programação {#skills}
+--------------------------------------------------------------------------------
+
+- <i class='fab fa-python'></i> Python
+
+- <i class="fab fa-r-project"></i> R
+
+```{r}
+build_skill_bars(skills)
+```
+
+
+
+
+
+
+
+
+
+Main
+================================================================================
+
+Rodrigo Aroni Siquette {#title}
+--------------------------------------------------------------------------------
+
+<p align="justify"> Estou cursando Geografia com ênfase em Sistema de Informação Geográfica, foco nas áreas de cartografia, geoprocessamento e sensoriamento remoto. e busco observar a importância da ciências de dados no mundo atual e a junção com SIG, estou em busca de me profissionalizar em analises de bancos de dados geoespacial com a utilização de Python e R .Estagiei na Secretaria Estadual Infraestrutura e Meio Ambiente, a qual me proporciona a oportunidade de, além de amplificar os conhecimentos adquiridos no curso, também ajuda a aplicá-los em prática para o desenvolvimento de um trabalho que seja útil para a sociedade.</p>
+
+<p align="justify"> Sabendo que a tecnologia é a sociedade e a sociedade não pode ser entendida ou representada sem suas ferramentas tecnológicas, a integração da Geografia com a tecnologia apresenta-se como resposta para tais necessidades, integrando a Ciência Geográfica em suas múltiplas dimensões às Tecnologias, assim utilizando a geografia como ferramenta capazes de auxiliar na tomada de decisões </p>
+ 
+
+
+
+Formação  {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'education')
+```
+
+
+
+Atividades extra curriculares {data-icon=laptop}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'research_positions')
+```
+
+
+
+Experiência Profissional {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+::: aside
+ 
+:::
+
+```{r}
+print_section(position_data, 'industry_positions')
+```
+
+<br>
+<br>
+<br>
+
+
+
+
+
+```{r}
+if(PDF_EXPORT){
+  cat("
+  
+Links {data-icon=link}
+--------------------------------------------------------------------------------
+
+<br>
+
+
+")
+  
+  walk2(links, 1:length(links), function(link, index){
+    print(glue('{index}. {link}'))
+  })
+}
+```
+
+
