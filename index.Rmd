@@ -52,6 +52,14 @@ Aside
 ![logo](https://www.arcgis.com/sharing/rest/content/items/7e14ae306f774bf491ed675293e6e8c0/info/thumbnail/ago_downloaded.gif/?w=400){width=100%}
 
 
+```{r}
+# When in export mode the little dots are unaligned, so fix that. 
+if(PDF_EXPORT){
+  cat("View this CV online with links at _https://siquette.github.io/cv/_")
+} else {
+  cat("[<i class='fas fa-download'></i> Download a PDF of this CV](https://github.com/siquette/cv/raw/main/strayer_cv.pdf)")
+}
+```
 
 Contato {#contact}
 --------------------------------------------------------------------------------
