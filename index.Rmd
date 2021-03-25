@@ -63,7 +63,7 @@ Aside
 if(PDF_EXPORT){
   cat("View this CV online with links at _https://siquette.github.io/cv/_")
 } else {
-  cat("[<i class='fas fa-download'></i> Download a PDF of this CV](https://github.com/siquette/cv/raw/main/rodrigo_cv.pdf)")
+  cat("[<i class='fas fa-download'></i> Download a PDF of this CV](https://github.com/siquette/cv/raw/main/CV.pdf)")
 }
 ```
 
@@ -72,6 +72,8 @@ Contato {#contact}
 
 
 - <i class="fa fa-envelope"></i> rodrigo.siquette@usp.br
+
+- <i class="fa fa-envelope"></i> rodrigosiquette@gmail.com
 
 - <i class="fa fa-phone"></i> (19) 995504223
 
