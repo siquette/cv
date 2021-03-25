@@ -13,5 +13,13 @@ skills <- tribble(
   "R",                  5,
  
   "Python",             4,
+  
+  "Qgis",               4,
+  
+  "ArcGIS",             5,
+  
+  "HTML5 e CSS3",       3,
+  
+  
  
 )

@@ -9,6 +9,10 @@ output:
     self_contained: true
 ---
 
+
+
+
+
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
   results='asis', 
@@ -17,6 +21,7 @@ knitr::opts_chunk$set(
 
 library(glue)
 library(tidyverse)
+library(pagedown)
 
 # Set this to true to have links turned into footnotes at the end of the document
 PDF_EXPORT <- FALSE
@@ -49,7 +54,8 @@ Aside
 ================================================================================
 
 
-![logo](https://www.arcgis.com/sharing/rest/content/items/7e14ae306f774bf491ed675293e6e8c0/info/thumbnail/ago_downloaded.gif/?w=400){width=100%}
+
+![logo](https://i0.wp.com/echaintechnology.com/wp-content/uploads/2018/12/echain_connected_world.gif?fit=480%2C270&ssl=1){width=100%}
 
 
 ```{r}
@@ -69,6 +75,8 @@ Contato {#contact}
 
 - <i class="fa fa-phone"></i> (19) 995504223
 
+- <i class="fa fa-home"></i> Av. Professor Mello Moraes, 1235 - Butantã, São Paulo
+
 
 
 Linguagem Programação {#skills}
@@ -78,9 +86,20 @@ Linguagem Programação {#skills}
 
 - <i class="fab fa-r-project"></i> R
 
+- <i class="fa fa-globe" aria-hidden="true"></i> Qgis
+
+- <i class="fa fa-globe" aria-hidden="true"></i>  ArcGIS
+
+- <i class="fa fa-html5" aria-hidden="true"></i> HTML5 e CSS3
+
+
+
 ```{r}
-build_skill_bars(skills)
+build_skill_bars(skills) #esta no arquivo common_variable#
+
+
 ```
+
 
 
 
