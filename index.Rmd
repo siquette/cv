@@ -65,12 +65,12 @@ Aside
 if(PDF_EXPORT){
   cat("View this CV online with links at _https://siquette.github.io/cv/_")
 } else {
-  cat("[<i class='fas fa-download'></i> Download a PDF of this CV](https://github.com/siquette/cv/raw/main/CV.pdf)")
+  cat("[<i class='fas fa-download'></i> Download a PDF of this CV](https://github.com/siquette/cv/raw/main/Rodrigo%20Aroni%20Siquette%20CV.pdf)")
 }
 
 ```
 <br><br>
-<h2 align="justify"><i class="fa fa-github"></i> [Portifólio](https://siquette.github.io/portfolio_page/) </h2>
+<h2 align="justify"><i class="fa fa-github"></i> [Portifólio](https://siquette.github.io/portifolio_3/) </h2>
 
 Contato {#contact}
 --------------------------------------------------------------------------------
@@ -122,9 +122,9 @@ Main
 Rodrigo Aroni Siquette {#title}
 --------------------------------------------------------------------------------
 
-<p align="justify"> Estou cursando Geografia com ênfase em Sistemas de Informação Geográfica e foco nas áreas de cartografia, geoprocessamento e sensoriamento remoto. Busco observar a importância da ciência de dados no mundo atual e a junção com SIG. Estou em busca de me profissionalizar em análises de bancos de dados geoespaciais com a utilização de Python e R.</p>
+<p align="justify"> Curso Geografia com ênfase em Sistemas de Informação Geográfica e foco nas áreas de cartografia, geoprocessamento e sensoriamento remoto. Procuro observar a importância da ciência de dados no mundo atual e sua junção com SIG. Estou em busca de me profissionalizar em análises de bancos de dados geoespaciais com a utilização de Python e R</p>
 
-<p align="justify"> Sabendo que a tecnologia é a sociedade e a sociedade não pode ser entendida ou representada sem suas ferramentas tecnológicas, a integração da Geografia com a tecnologia apresenta-se como resposta para tais necessidades, integrando a Ciência Geográfica em suas múltiplas dimensões às Tecnologias, assim utilizando a geografia como ferramenta capaz de auxiliar na tomada de decisões. </p>
+<p align="justify"> Assumindo que a tecnologia e a sociedade não podem ser compreendidas ou representadas sem suas ferramentas tecnológicas, a integração da Geografia com a tecnologia apresenta-se como resposta para tais necessidades, integrando a Ciência Geográfica em suas múltiplas dimensões às Tecnologias com o objetivo de desenvolver projetos que auxiliem na tomada de decisões. </p>
  
 
 
