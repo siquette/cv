@@ -84,7 +84,7 @@ Contato {#contact}
 
 - <i class="fa fa-phone"></i> (19) 995504223
 
-- <i class="fa fa-home"></i> Av. Professor Mello Moraes, 1235 - Butantã, São Paulo
+- <i class="fa fa-home"></i> Rua professor Celso Quirino dos santos, 250 São Paulo
 
 
 
@@ -124,7 +124,7 @@ Main
 Rodrigo Aroni Siquette {#title}
 --------------------------------------------------------------------------------
 
-<p align="justify"> Curso Geografia com ênfase em Sistemas de Informação Geográfica e foco nas áreas de cartografia, geoprocessamento e sensoriamento remoto. Procuro observar a importância da ciência de dados no mundo atual e sua junção com SIG. Estou em busca de me profissionalizar em análises de bancos de dados geoespaciais com a utilização de Python e R</p>
+<p align="justify"> Cursei Geografia com ênfase em Sistemas de Informação Geográfica e foco nas áreas de cartografia, geoprocessamento e sensoriamento remoto. Procuro observar a importância da ciência de dados no mundo atual e sua junção com SIG. Estou em busca de me profissionalizar em análises de bancos de dados geoespaciais com a utilização de Python e R</p>
 
 <p align="justify"> Assumindo que a tecnologia e a sociedade não podem ser compreendidas ou representadas sem suas ferramentas tecnológicas, a integração da Geografia com a tecnologia apresenta-se como resposta para tais necessidades, integrando a Ciência Geográfica em suas múltiplas dimensões às Tecnologias com o objetivo de desenvolver projetos que auxiliem na tomada de decisões. </p>
  
