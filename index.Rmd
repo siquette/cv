@@ -84,7 +84,7 @@ Contato {#contact}
 
 - <i class="fa fa-phone"></i> (19) 995504223
 
-- <i class="fa fa-home"></i> Rua professor Celso Quirino dos santos, 250 São Paulo
+- <i class="fa fa-home"></i> Rua professor Celso Quirino dos santos, Butanta São Paulo
 
 
 
