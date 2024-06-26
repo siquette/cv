@@ -78,7 +78,7 @@ Contato {#contact}
 
 - <i class="fa fa-envelope"></i> rodrigo.siquette@usp.br
 
-- <i class="fa fa-envelope"></i> rodrigosiquette@gmail.com
+- <i class="fa fa-envelope"></i> rodrigoaronisiquette@gmail.com
 
 - <i class="fa fa-linkedin-square"></i> [linkedin.com/in/rodrigo-aroni-siquette](https://www.linkedin.com/in/rodrigo-aroni-siquette/)
 
@@ -124,9 +124,13 @@ Main
 Rodrigo Aroni Siquette {#title}
 --------------------------------------------------------------------------------
 
-<p align="justify"> Cursei Geografia com ênfase em Sistemas de Informação Geográfica e foco nas áreas de cartografia, geoprocessamento e sensoriamento remoto. Procuro observar a importância da ciência de dados no mundo atual e sua junção com SIG. Estou em busca de me profissionalizar em análises de bancos de dados geoespaciais com a utilização de Python e R</p>
+<p align="justify"> Geógrafo pela USP curioso e apaixonado por geopolítica, economia e o poder dos dados. 
+Experiência de 4 anos em geoprocessamento e sensoriamento remoto na Secretário do Meio Ambiente e SCCON.
+Entusiasta do universo dos dados e cursando MBA de Data Science e Analytics na Esalq - USP</p>
 
-<p align="justify"> Assumindo que a tecnologia e a sociedade não podem ser compreendidas ou representadas sem suas ferramentas tecnológicas, a integração da Geografia com a tecnologia apresenta-se como resposta para tais necessidades, integrando a Ciência Geográfica em suas múltiplas dimensões às Tecnologias com o objetivo de desenvolver projetos que auxiliem na tomada de decisões. </p>
+<p align="justify">Estou motivado por uma visão de um mundo onde as informações geográficas se entrelaçam com análises de dados abrangentes, amplificando nossa compreensão e fornecendo insights críticos para uma variedade de campos. A busca pelo aprimoramento contínuo e pela capacidade de conduzir análises complexas é o que me impulsiona a trilhar o caminho do Cientista de Dados, capacitado para enfrentar os desafios da sociedade tecnológica moderna. </p>
+
+<p align="justify">Busco oportunidades para aplicar meus conhecimentos técnicos e analíticos em projetos desafiadores e inovadores. Vamos bater um papo?. </p>
  
 
 
