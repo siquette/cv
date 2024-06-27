@@ -127,9 +127,9 @@ Rodrigo Aroni Siquette {#title}
 <p align="justify"> Geógrafo pela USP curioso e apaixonado por geopolítica, economia e o poder dos dados. 
 Experiência de 4 anos em geoprocessamento e sensoriamento remoto na Secretário do Meio Ambiente e SCCON.
 Entusiasta do universo dos dados e cursando MBA de Data Science e Analytics na Esalq - USP</p>
-
+<br>
 <p align="justify">Estou motivado por uma visão de um mundo onde as informações geográficas se entrelaçam com análises de dados abrangentes, amplificando nossa compreensão e fornecendo insights críticos para uma variedade de campos. A busca pelo aprimoramento contínuo e pela capacidade de conduzir análises complexas é o que me impulsiona a trilhar o caminho do Cientista de Dados, capacitado para enfrentar os desafios da sociedade tecnológica moderna. </p>
-
+<br>
 <p align="justify">Busco oportunidades para aplicar meus conhecimentos técnicos e analíticos em projetos desafiadores e inovadores. Vamos bater um papo?. </p>
  
 
