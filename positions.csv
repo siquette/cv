@@ -1,6 +1,5 @@
 section,in_resume,title,loc,institution,start,end,description_1,description_2,description_3
-education,TRUE,Graduação em Geografia,Faculdade de Filosofia Letras e Ciências Humanas (FFLCH - USP),Universidade de São Paulo (USP),2015,2022,,,
-education,TRUE,Cientista de Dados,Comunidade DS,,2022,,,,
+education,TRUE,Graduação em Geografia,Faculdade de Filosofia Letras e Ciências Humanas (FFLCH - USP),Universidade de São Paulo (USP),2016,2023,,,
 education,TRUE,Data Science e Analytics,MBA USP/Esalq,Universidade de São Paulo (USP),2023,2025,,,
 education,TRUE,Bacharelado em Ciência de Dados,Universidade Virtual do Estado de São Paulo,Univesp,2024,2028,,,
 research_positions,TRUE,Piscina na 42 São Paulo,42 School Sao Paulo,42 School Sao Paulo,2023,2023,"<p align=""justify""> 42 School é o nome da rede global de escolas de programaçao com financiamento privado, geralmente por indivíduos de alto valor da indústria de tecnologia. Seu objetivo é simples: reduzir a escassez global de programadores e engenheiros de software, oferecendo educação gratuita, moderna e econômica para qualquer pessoa dedicada a concluir seu currículo. É muito parecido com um bootcamp de programação para iniciantes na linguagem C </p>",,
@@ -41,7 +40,8 @@ industry_positions,TRUE,Seção Tecnica Informatica,Faculdade de Filosofia Letra
 - Migração e implantação do sistema Windows para Linux Debian; 
 - Configuração de todo sistema Debian na rede; 
 - Criação de novos usuários; 
-- Análises e relatórios em SQL solicitados pela Diretoria da USP</p>",
+- Análises e relatórios em SQL solicitados pela Diretoria da USP
+-  *Com a bolsa de 2h30 diárias, consegui conciliar o estágio</p>",
 industry_positions,TRUE,"Secretaria de Meio Ambiente, Infraestrutura e Logística do Estado de São Paulo ",NA,NA,2018,2020,Cargo: Estagiário de Geoprocessamento ,"<p align=""justify""> Atribuições: - Mapeamento temporal do uso do solo através de imagens de satélite e aerofotografia;
 - ⁠Elaboração de layouts para apresentação de mapas;
 - ⁠Mapeamento de base cartográfica e Áreas de Preservação Permanente; 
