@@ -57,7 +57,7 @@ Aside
 
 
 
-![logo](https://i0.wp.com/echaintechnology.com/wp-content/uploads/2018/12/echain_connected_world.gif?fit=480%2C270&ssl=1){width=100%}
+![logo](https://raw.githubusercontent.com/siquette/cv/main/_bd3e0a2f-6bce-4ceb-a3fa-59098cae4e2f.jpg){width=100%}
 
 
 ```{r}
