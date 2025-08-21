@@ -1,6 +1,6 @@
 section,in_resume,title,loc,institution,start,end,description_1,description_2,description_3
-education,TRUE,Graduação em Geografia,Faculdade de Filosofia Letras e Ciências Humanas (FFLCH - USP),Universidade de São Paulo (USP),2016,2023,,,
-education,TRUE,Data Science e Analytics,MBA USP/Esalq,Universidade de São Paulo (USP),2023,2025,,,
+education,TRUE,Graduação em Geografia,Faculdade de Filosofia Letras e Ciências Humanas (FFLCH - USP),Universidade de São Paulo (USP),2016,2023,TCC: Análise Espacial de Doenças Relacionadas Ao Saneamento Ambiental Inadequado (drsai) na Subprefeitura Capela do Socorro ,,
+education,TRUE,Data Science e Analytics,MBA USP/Esalq,Universidade de São Paulo (USP),2023,2025,TCC: Mapeamento e Análise dos Padrões de Roubo de Celulares em São Paulo,,
 education,TRUE,Especialização em Inteligência Artificial,Escola Politécnica da USP,Universidade de São Paulo (USP),2025,2027,,,
 research_positions,TRUE,Piscina na 42 São Paulo,42 School Sao Paulo,42 School Sao Paulo,2023,2023,"<p align=""justify""> 42 School é o nome da rede global de escolas de programaçao com financiamento privado, geralmente por indivíduos de alto valor da indústria de tecnologia. Seu objetivo é simples: reduzir a escassez global de programadores e engenheiros de software, oferecendo educação gratuita, moderna e econômica para qualquer pessoa dedicada a concluir seu currículo. É muito parecido com um bootcamp de programação para iniciantes na linguagem C </p>",,
 research_positions,TRUE,Teoria dos Jogos,Departamento de Sociologia,Universidade de São Paulo (USP),2023,2023,"<p align=""justify""> A teoria dos jogos é um ramo da matemática que estuda a tomada de decisão em situações em que vários indivíduos ou agentes estão envolvidos, e o resultado da decisão de cada agente depende das decisões dos outros. Ele fornece uma estrutura para analisar o comportamento estratégico de indivíduos ou grupo </p>",,
@@ -21,18 +21,25 @@ research_positions,TRUE,"Técnicas de Sensoriamento Remoto Aplicado à Ecologia
 research_positions,TRUE,Análise Espacial e Geoprocessamento,Departamento de Geografia,Universidade de São Paulo (USP),2018,2018,"<p align=""justify"">Introduzir a tecnologia do geoprocessamento como apoio analítico, considerando as vantagens decorrentes de sua utilização para as pesquisas acadêmicas em desenvolvimento. Apresentar o estado da arte e as experiências conhecidas de implantação de sistemas de informações geográficas, bem como apontar as tendências destas técnicas computacionais. Possibilitar o aspecto prático, através da operação de sistemas de informações geográficas em laboratório. Aprofundamento em temas de pesquisa teórica e práticas, desenvolvimento de métodos e técnicas de trabalho especializadas.</p>",,
 research_positions,TRUE,Curso Técnico de Informática,Etec Polivalente de Americana,NA,2009,2011,NA,,
 research_positions,TRUE,Curso técnico de administração,Etec Polivalente de Americana,NA,2007,2009,NA,,
-industry_positions,TRUE,h2r insights & trends,NA,NA,2024,2026,Cargo: Analista de BI,,
-industry_positions,TRUE,SCCON - Tecnologia Geoespacial e Mapeamento,NA,NA,2021,2023,Cargo: Analista de Geoprocessamento,"<p align=""justify""> AtribuiçõesMonitoramento Diário do Estado de Mato Grosso | Suporte Ambiental com Tecnologia SCCON
-- Monitoramento ambiental com a aplicação de geotecnologias (Planet); 
-- Acompanhamento e detecção de mudanças (degradação ambiental); 
+industry_positions,TRUE,HR Insights & Trends,NA,NA,2024,2026,Cargo: Analista de BI,"Atribuições: 
+- Desenvolvimento de dashboards interativos e relatórios estratégicos no Power BI 
+- Coleta, integração e tratamento de dados
+- Modelagem de dados e construção de indicadores (KPIs) via DAX 
+ ",
+industry_positions,TRUE,SCCON - Tecnologia Geoespacial e Mapeamento,NA,NA,2021,2023,Cargo: Analista de Geoprocessamento,"Atribuições: 
+- Atribuições: Monitoramento Diário do Estado de Mato Grosso | Suporte Ambiental com Tecnologia SCCON
+- Monitoramento ambiental com a aplicação de geotecnologias (Planet);
+- Acompanhamento e detecção de mudanças (degradação ambiental);
 - Suporte á área em geral;
 - Mapeamento temporal do uso do solo através de imagens Planet
-- ⁠Mapeamento de base cartográfica e Áreas de Preservação Permanente; 
-- ⁠Interpretação, produção de dados vetoriais e classificação de imagens;
-- ⁠Análises temporais de uso e cobertura do solo;  </p>",
+⁠- Mapeamento de base cartográfica e Áreas de Preservação Permanente;
+⁠- Interpretação, produção de dados vetoriais e classificação de imagens;
+⁠- Análises temporais de uso e cobertura do solo.
+",
 industry_positions,TRUE,Confecção Massola Kovaski,NA,NA ,2008,2010,Cargo: Auxiliar administrativo,,
 industry_positions,TRUE,Centro técnico Errera Racing,NA,NA,2010,2015,Cargo: Mecânico,,
-industry_positions,TRUE,Seção Tecnica Informatica,Faculdade de Filosofia Letras e Ciências Humanas (FFLCH - USP),Universidade de São Paulo (USP),2016,2023,Cargo: Estagio / Infraestrutura / Dev / Suporte N1,"<p align=""justify"">Atribuições:  Gestão de computadores: montagem, manutenção e controle de peças; 
+industry_positions,TRUE,Seção Tecnica Informatica,Faculdade de Filosofia Letras e Ciências Humanas (FFLCH - USP),Universidade de São Paulo (USP),2016,2023,Cargo: Estagio / Infraestrutura / Dev / Suporte N1,"Atribuições:  
+- Gestão de computadores: montagem, manutenção e controle de peças; 
 - Suporte e atendimento de chamados N1;
 - Preparação da sala de informática para aulas; 
 - Desenvolvimento full stack (PHP/CSS/HTML);
@@ -42,8 +49,9 @@ industry_positions,TRUE,Seção Tecnica Informatica,Faculdade de Filosofia Letra
 - Configuração de todo sistema Debian na rede; 
 - Criação de novos usuários; 
 - Análises e relatórios em SQL solicitados pela Diretoria da USP
--  *Com a bolsa de 2h30 diárias, consegui conciliar o estágio</p>",
-industry_positions,TRUE,"Secretaria de Meio Ambiente, Infraestrutura e Logística do Estado de São Paulo ",NA,NA,2018,2020,Cargo: Estagiário de Geoprocessamento ,"<p align=""justify""> Atribuições: - Mapeamento temporal do uso do solo através de imagens de satélite e aerofotografia;
+-  *Com a bolsa de 2h30 diárias, consegui conciliar o estágio",
+industry_positions,TRUE,"Secretaria de Meio Ambiente, Infraestrutura e Logística do Estado de São Paulo ",NA,NA,2018,2020,Cargo: Estagiário de Geoprocessamento ,"Atribuições: 
+- Mapeamento temporal do uso do solo através de imagens de satélite e aerofotografia;
 - ⁠Elaboração de layouts para apresentação de mapas;
 - ⁠Mapeamento de base cartográfica e Áreas de Preservação Permanente; 
 - ⁠Interpretação, produção de dados vetoriais e classificação de imagens;
@@ -52,8 +60,8 @@ industry_positions,TRUE,"Secretaria de Meio Ambiente, Infraestrutura e Logístic
 - ⁠Manipulação e construção de camadas SIG (Sistema de Informações Geográficas);
 - ⁠Análises temporais de uso e cobertura do solo; 
 - ⁠Edição de laudos técnicos; 
-- ⁠Verificação de denúncias solicitadas pelo MP; </p>",
-teaching_positions,FALSE,Javascript for Shiny Users,RStudio::conf 2020,N/A,,2020,Served as TA for two day workshop on how to leverage Javascript in Shiny applications,"<p align=""justify""> Atribuições:  Coordenadoria de Fiscalização Ambiental (CFA) integra a estrutura básica da Secretaria do Meio Ambiente (SMA), tendo como principal objetivo planejar, coordenar, monitorar e executar a Política de Fiscalização Ambiental no Estado de São Paulo, conjuntamente com a Polícia Militar Ambiental. Utilizando a metodologia para possibilitar a identificação e fiscalização dos desmatamentos ilegais e outras irregularidades a partir Monitoramento Ambiental por Imagens de Satélites </p>",
+- ⁠Verificação de denúncias solicitadas pelo MP",
+teaching_positions,FALSE,Javascript for Shiny Users,RStudio::conf 2020,N/A,,2020,Served as TA for two day workshop on how to leverage Javascript in Shiny applications,"Atribuições:  Coordenadoria de Fiscalização Ambiental (CFA) integra a estrutura básica da Secretaria do Meio Ambiente (SMA), tendo como principal objetivo planejar, coordenar, monitorar e executar a Política de Fiscalização Ambiental no Estado de São Paulo, conjuntamente com a Polícia Militar Ambiental. Utilizando a metodologia para possibilitar a identificação e fiscalização dos desmatamentos ilegais e outras irregularidades a partir Monitoramento Ambiental por Imagens de Satélites ",
 teaching_positions,FALSE,Statistical Computing in R,Vanderbilt Biostatistics Department,"Nashville, TN",2017,2017,TA and lectured,Covered introduction to R language for statistics applications,Graduate level class
 teaching_positions,FALSE,Advanced Statistical Learning and Inference,Vanderbilt Biostatistics Department,"Nashville, TN",2017,2018,TA and lectured,Topics covered from penalized regression to boosted trees and neural networks,Highest level course offered in department
 teaching_positions,FALSE,Advanced Statistical Computing,Vanderbilt Biostatistics Department,"Nashville, TN",2018,2018,TA and lectured,Covered modern statistical computing algorithms,4th year PhD level class

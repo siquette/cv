@@ -84,7 +84,7 @@ Contato {#contact}
 
 - <i class="fa fa-phone"></i> (19) 995504223
 
-- <i class="fa fa-home"></i> Rua professor Celso Quirino dos santos, Butanta São Paulo
+
 
 
 
@@ -124,7 +124,7 @@ Main
 Rodrigo Aroni Siquette {#title}
 --------------------------------------------------------------------------------
 
-<p align="justify"> Minha missão? Desvendar os segredos escondidos nos dados espaciais.</p>
+
 
 <p align="justify">Imagine um mundo onde cada decisão de negócio, cada estratégia de mercado e cada solução para desafios globais é potencializada pelo poder da geografia e da análise de dados. É nesse ponto de intersecção que me fascina . </p>
 
@@ -142,7 +142,11 @@ Formação  {data-icon=graduation-cap data-concise=true}
 print_section(position_data, 'education')
 ```
 
-
+Experiência Profissional {data-icon=suitcase}
+--------------------------------------------------------------------------------
+```{r}
+print_section(position_data, 'industry_positions')
+```
 
 Atividades extra curriculares {data-icon=laptop}
 --------------------------------------------------------------------------------
@@ -153,16 +157,11 @@ print_section(position_data, 'research_positions')
 
 
 
-Experiência Profissional {data-icon=suitcase}
---------------------------------------------------------------------------------
-
 ::: aside
  
 :::
 
-```{r}
-print_section(position_data, 'industry_positions')
-```
+
 
 <br>
 <br>
