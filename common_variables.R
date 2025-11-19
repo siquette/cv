@@ -10,15 +10,15 @@ Currently searching for a position that allows me to build tools leveraging a co
 # Language skills for skill bars visualization
 skills <- tribble(
   ~skill,               ~level,
-  "R",                  5,
+  "R",                  4,
  
-  "Python",             4,
+  "Python",             5,
   
-  "Qgis",               4,
+  "Qgis",               5,
   
-  "ArcGIS",             5,
+  "ArcGIS",             4,
   
-  "HTML5 e CSS3",       3,
+  "HTML5 e CSS3",       1,
   
   
  

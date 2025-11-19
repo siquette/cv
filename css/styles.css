@@ -1,103 +1,181 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat|Playfair+Display&display=swap");
+/* ARQUIVO: styles.css - VERSÃO FINAL OTIMIZADA */
 
-/* Main text is monserrat*/
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,600,700|Playfair+Display:400,700&display=swap");
+
+/* --- 1. Tipografia Global --- */
 body {
   font-family: "Montserrat", sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.3;
   color: #444;
 }
 
-/* Give headers playfair font */
-h1,
-h2,
-h3 {
+/* Títulos Principais */
+h1, h2, h3 {
   font-family: "Playfair Display", serif;
   color: #000;
+  font-weight: 700;
 }
 
-/* When in PDF export mode make sure superscripts are nice and small and italic */
+/* Links Discretos e Elegantes */
+a {
+  color: #08306b; /* Azul do tema */
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: #2c3e50;
+  text-decoration: underline;
+  background-color: #e1ecf4; /* Leve destaque ao passar o mouse */
+}
+
+/* Ajuste para superscripts */
 sup {
   font-size: 0.45rem;
   font-style: italic;
 }
 
-/* Avoid the breaking within a section */
-.blocks {
-  break-inside: avoid;
+/* --- 2. Variáveis e Layout Pagedown --- */
+:root {
+  --sidebar-width: 12rem;
+  --sidebar-background-color: #f7fbff; 
+  --sidebar-horizontal-padding: 0.2in; 
+  --decorator-outer-dim: 10px;
+  --decorator-border: 2px solid #bdd7e7; 
 }
 
 * {
-  /* Override default right margin for sidebar*/
   --pagedjs-margin-right: 0.2in;
   --pagedjs-margin-left: 0.2in;
 }
 
-/* Customize some of the sizing variables */
-:root {
-  --sidebar-width: 12rem; /* Shrink sidebar width  */
-  --sidebar-background-color: #f7fbff; /* Make sidebar blue */
-  --sidebar-horizontal-padding: 0.01in; /* Reduce sidebar padding */
-  --decorator-outer-dim: 10px; /* Make position deliniating circles larger */
-  --decorator-border: 2px solid #bdd7e7; /* Make timeline a blue as well*/
+.blocks {
+  break-inside: avoid;
 }
 
-.details .place {
-  margin-top: 0.25rem;
+/* --- 3. ESTILIZAÇÃO DA COLUNA PRINCIPAL (MAIN) --- */
+
+/* Texto Justificado para visual acadêmico/oficial */
+.main-block p {
+  text-align: justify;
+  text-justify: inter-word;
+  padding-right: 10px; 
 }
 
-.main-block:not(.concise) .details div {
-  padding-top: 0.005rem;
+/* Destaque para Cargos/Títulos */
+.blocks h3 {
+  font-weight: 700;
+  color: #08306b; /* Azul do tema */
+  margin-bottom: 2px;
 }
 
-/* Laptop icon isn't centered by default which is lame */
+/* Alinhamento e Destaque das Datas */
+.blocks .date {
+  float: right;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* --- 4. ESTILIZAÇÃO DA BARRA LATERAL (SIDEBAR) --- */
+
+/* Container Geral */
+.aside {
+  width: calc(var(--sidebar-width) + 9px);
+  font-size: 0.75rem;
+  line-height: 1.25;
+  padding-top: 0 !important; /* Remove teto para subir o globo */
+}
+
+/* Títulos da Lateral (Contato, Competências...) */
+.aside h2 {
+  font-family: "Playfair Display", serif;
+  font-weight: 700 !important;
+  font-size: 1.1rem;
+  color: #000;
+  margin-top: 25px !important; /* Respiro de "duas linhas" */
+  margin-bottom: 5px !important;
+  padding-top: 0;
+}
+
+/* Título do Portfólio (Exceção para ficar perto do globo) */
+.aside h2:first-of-type {
+  margin-top: 5px !important;
+}
+
+/* Listas da Lateral */
+.aside ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.aside li {
+  margin-bottom: 4px;
+}
+
+.aside li::before {
+  display: none;
+  content: none;
+}
+
+/* Ícones (FontAwesome) */
+.aside .fa, 
+.aside .fas, 
+.aside .fab {
+  color: #08306b !important;
+  width: 18px; 
+  text-align: center;
+  margin-right: 2px;
+}
+
+/* Grupos de Skills (Tags/Chips visuais) */
+.skill-group {
+  margin-bottom: 8px !important;
+}
+
+.skill-group strong {
+  display: block;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700 !important;
+  color: #08306b;
+  margin-bottom: 3px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skill-group span {
+  color: #666;
+  font-size: 0.7rem;
+  font-weight: 300;
+}
+
+/* --- 5. GLOBO INTERATIVO --- */
+#interactive-globe {
+    width: 100%;
+    overflow: visible;
+}
+
+#interactive-globe svg {
+    display: block;
+    margin: 0 auto;
+    background-color: transparent;
+}
+
+.connection, .particle {
+    pointer-events: none;
+}
+
+/* --- 6. AJUSTES FINAIS --- */
 .fa-laptop {
   margin-left: -3px;
 }
 
-/* When we have links at bottom in a list make sure they actually are numbered */
-#links li {
-  list-style-type: decimal;
-}
-
-/* Dont put the little fake list point in front of links */
-.aside li::before {
-  display: none;
-}
-
-/* Move closer to start and up towards header */
-.aside ul {
-  padding-left: 1rem;
-}
-
-.aside li::before {
-  position: relative;
-  margin-left: -4.25pt;
-  content: "• ";
-}
-
-/* Make sure elements in asside are centered and have a nice small text */
-.aside {
-  width: calc(var(--sidebar-width) + 9px);
-  line-height: 1.2;
-  font-size: 0.75rem;
-}
-
-/* Make little circle outline be a light blue */
 .decorator::after {
   background-color: #08306b;
 }
-
-/* Remove the fake bullets from lists */
-.aside li::before {
-  content: auto;
-}
-
-.skill-bar {
-  color: white;
-  padding: 0.1rem 0.25rem;
-  margin-top: 3px;
-  position: relative;
-  width: 100%;
-}
-

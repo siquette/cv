@@ -12,9 +12,6 @@ output:
 
 
 
-
-
-
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
   results='asis', 
@@ -51,70 +48,137 @@ if(PDF_EXPORT){
 }
 ```
 
+::: aside
 
-Aside
-================================================================================
+<div id="interactive-globe" style="width: 160px; height: 160px; margin: -25px auto 5px auto; border-radius: 50%; overflow: hidden; border: 2px solid #bdd7e7;"></div>
 
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
+<script>
+window.addEventListener("load", function() {
+    const width = 160; const height = 160; 
+    const sensitivity = 75; const rotationSpeed = 0.3;
+    const containerId = "#interactive-globe";
+    
+    d3.select(containerId).selectAll("*").remove();
+    const svg = d3.select(containerId).append("svg")
+      .attr("width", width).attr("height", height)
+      .style("display", "block").style("margin", "auto");
 
+    const projection = d3.geoOrthographic()
+      .scale(79).center([0, 0]).rotate([0, -30])
+      .translate([width / 2, height / 2]);
 
-![logo](https://raw.githubusercontent.com/siquette/cv/main/_bd3e0a2f-6bce-4ceb-a3fa-59098cae4e2f.jpg){width=100%}
+    let path = d3.geoPath().projection(projection).pointRadius(1.5);
+    const CONNECTION_COLOR = "#08306b"; 
 
+    svg.append("circle").attr("cx", width/2).attr("cy", height/2)
+      .attr("r", projection.scale()).attr("fill", "#ADD8E6").attr("stroke", "none");
 
-```{r}
-# When in export mode the little dots are unaligned, so fix that. 
-#if(PDF_EXPORT){
-#  cat("View this CV online with links at _https://siquette.github.io/cv/_")
-# } else {
-#  cat("[<i class='fas fa-download'></i> Download a PDF of this CV](https://github.com/siquette/cv/raw/main/Rodrigo%20Aroni%20Siquette%20CV.pdf)")
-# }
+    const mapGroup = svg.append("g"); const linesGroup = svg.append("g"); const particlesGroup = svg.append("g");
+    let isAutoRotating = true; let isDragging = false; let activeLinks = []; 
 
-```
-<br><br>
-<h2 align="justify"><i class="fa fa-github"></i> [Portifólio](https://siquette.github.io/portifolio_3/) </h2>
+    function redraw() {
+        path = d3.geoPath().projection(projection).pointRadius(1.5);
+        svg.selectAll("path.country").attr("d", path);
+        svg.selectAll("path.connection").attr("d", path);
+        svg.selectAll("path.particle").attr("d", function(d) { return d.currentCoords ? path({type: "Point", coordinates: d.currentCoords}) : null; });
+    }
 
-Contato {#contact}
---------------------------------------------------------------------------------
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(world) {
+        const countries = topojson.feature(world, world.objects.countries).features;
+        const globePaths = mapGroup.selectAll("path.country").data(countries).enter().append("path")
+          .attr("class", "country").attr("d", path).attr("fill", "#FFFFFF") 
+          .attr("stroke", "#444").attr("stroke-width", "0.3px").style("cursor", "grab");
 
+        const drag = d3.drag()
+            .on("start", function() { isDragging = true; isAutoRotating = false; d3.select(this).style("cursor", "grabbing"); })
+            .on("drag", function(event) {
+                const rotate = projection.rotate();
+                const k = sensitivity / projection.scale();
+                projection.rotate([rotate[0] + event.dx * k, rotate[1] - event.dy * k]);
+                redraw(); 
+            })
+            .on("end", function() { isDragging = false; isAutoRotating = true; d3.select(this).style("cursor", "grab"); });
+        svg.call(drag);
 
-- <i class="fa fa-envelope"></i> rodrigo.siquette@usp.br
+        globePaths.on("mouseover", function() { if (!isDragging) { isAutoRotating = false; d3.select(this).attr("fill", "#bdd7e7"); } })
+                  .on("mouseout", function() { if (!isDragging) { isAutoRotating = true; d3.select(this).attr("fill", "#FFFFFF"); } });
 
-- <i class="fa fa-envelope"></i> rodrigoaronisiquette@gmail.com
+        d3.interval(function() {
+            const numNewLinks = 10; 
+            if (activeLinks.length > 24) activeLinks = activeLinks.slice(4);
+            for (let i = 0; i < numNewLinks; i++) {
+                const source = countries[Math.floor(Math.random() * countries.length)];
+                const target = countries[Math.floor(Math.random() * countries.length)];
+                if (source && target) {
+                    const s = d3.geoCentroid(source); const t = d3.geoCentroid(target);
+                    const linkData = { type: "LineString", coordinates: [s, t], source: s, target: t, id: Date.now()+Math.random(), currentCoords: s };
+                    activeLinks.push(linkData); createLinkAndParticle(linkData);
+                }
+            }
+        }, 1200);
 
-- <i class="fa fa-linkedin-square"></i> [linkedin.com/in/rodrigo-aroni-siquette](https://www.linkedin.com/in/rodrigo-aroni-siquette/)
+        function createLinkAndParticle(linkData) {
+            linesGroup.append("path").datum(linkData).attr("class", "connection").attr("d", path)
+                .attr("fill", "none").attr("stroke", CONNECTION_COLOR).attr("stroke-width", "2px") 
+                .attr("stroke-dasharray", "2,2").style("opacity", 0.5).style("pointer-events", "none")
+                .transition().duration(3000).style("opacity", 0).remove();
 
-- <i class="fa fa-phone"></i> (19) 995504223
+            const particle = particlesGroup.append("path").datum(linkData).attr("class", "particle")
+                .attr("fill", CONNECTION_COLOR).attr("d", path({type: "Point", coordinates: linkData.source}))
+                .style("pointer-events", "none");
+            
+            const interpolator = d3.geoInterpolate(linkData.source, linkData.target);
+            particle.transition().duration(2000 + Math.random() * 1000).ease(d3.easeQuadInOut)
+                .tween("route", function(d) { return function(t) { d.currentCoords = interpolator(t); d3.select(this).attr("d", path({type: "Point", coordinates: d.currentCoords})); }; })
+                .remove();
+        }
 
+        d3.timer(function() {
+            if (!isDragging && isAutoRotating) {
+                const rotate = projection.rotate(); projection.rotate([rotate[0] + rotationSpeed, rotate[1]]); redraw();
+            }
+        });
+    }).catch(err => console.error(err));
+});
+</script>
 
+<h2 style="margin-top: 5px !important;"><i class="fa fa-github"></i> [Portfólio](https://siquette.github.io/portifolio_3/)</h2>
 
+<h2>Contato</h2>
+<ul>
+<li><i class="fa fa-envelope"></i> rodrigo.siquette@usp.br</li>
+<li><i class="fa fa-envelope"></i> rodrigoaronisiquette@gmail.com</li>
+<li><i class="fa fa-linkedin-square"></i> [linkedin.com/in/rodrigo-aroni-siquette](https://www.linkedin.com/in/rodrigo-aroni-siquette/)</li>
+<li><i class="fa fa-phone"></i> (19) 995504223</li>
+</ul>
 
+<h2>Competências Técnicas</h2>
 
-Linguagem Programação {#skills}
---------------------------------------------------------------------------------
+<div class="skill-group">
+<strong>Linguagens & Análise</strong>
+<i class="fab fa-python fa-fw"></i> Python <span>(Pandas, Scikit-Learn, TensorFlow)</span><br>
+<i class="fab fa-r-project fa-fw"></i> R <span>(Tidyverse, Shiny)</span><br>
+<i class="fas fa-database fa-fw"></i> SQL
+</div>
 
-- <i class='fab fa-python'></i> Python
+<div class="skill-group">
+<strong>Geoespacial</strong>
+<i class="fas fa-map-marked-alt fa-fw"></i> ArcGIS <br>
+<i class="fas fa-globe-americas fa-fw"></i> QGIS<br>
+<i class="fas fa-layer-group fa-fw"></i> GeoPandas<br>
+<i class="fas fa-database fa-fw"></i> PostGIS
+</div>
 
-- <i class="fab fa-r-project"></i> R
+<div class="skill-group">
+<strong>Ferramentas & DevOps</strong>
+<i class="fab fa-git-alt fa-fw"></i> Git / GitHub<br>
+<!-- <i class="fab fa-docker fa-fw"></i> Docker<br> -->
+<i class="fab fa-markdown fa-fw"></i> Markdown / LaTeX
+</div>
 
-- <i class="fa fa-globe" aria-hidden="true"></i> Qgis
-
-- <i class="fa fa-globe" aria-hidden="true"></i>  ArcGIS
-
-- <i class="fa fa-html5" aria-hidden="true"></i> HTML5 e CSS3
-
-
-
-```{r}
-build_skill_bars(skills) #esta no arquivo common_variable#
-
-
-```
-
-
-
-
-
-
-
+:::
 
 
 
@@ -126,9 +190,7 @@ Rodrigo Aroni Siquette {#title}
 
 
 
-<p align="justify">Imagine um mundo onde cada decisão de negócio, cada estratégia de mercado e cada solução para desafios globais é potencializada pelo poder da geografia e da análise de dados. É nesse ponto de intersecção que me fascina . </p>
-
-<p align="justify">Da geopolítica à economia, dos mapas aos algoritmos. Porque no xadrez do mundo moderno, entender o "onde" é tão crucial quanto o "o quê" e o "por quê". </p>
+<p align="justify"> Cientista de Dados e Geógrafo (USP) com sólida formação acadêmica e foco em Inteligência Espacial. Especialista na transformação de dados complexos em soluções estratégicas através de modelagem estatística, Python e SQL. Experiência comprovada em análise de alocação territorial e inteligência de mercado, unindo rigor científico com agilidade de negócios. </p>
 
 <p align="justify">Vamos bater um papo? </p>
  
