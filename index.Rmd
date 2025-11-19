@@ -141,8 +141,8 @@ window.addEventListener("load", function() {
             if (window.globeInterval) clearInterval(window.globeInterval);
             
             window.globeInterval = setInterval(function() {
-                const numNewLinks = 15; 
-                if (activeLinks.length > 25) activeLinks = activeLinks.slice(4);
+                const numNewLinks = 10; 
+                if (activeLinks.length > 20) activeLinks = activeLinks.slice(4);
                 for (let i = 0; i < numNewLinks; i++) {
                     const source = countries[Math.floor(Math.random() * countries.length)];
                     const target = countries[Math.floor(Math.random() * countries.length)];
