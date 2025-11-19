@@ -55,156 +55,142 @@ if(PDF_EXPORT){
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://unpkg.com/topojson-client@3"></script>
 <script>
-// 1. Definição da Lógica do Globo (Isolada)
-function renderGlobe() {
-    const containerId = "#interactive-globe";
-    const container = document.querySelector(containerId);
-    
-    // Segurança: Se o container não existir (erro de layout), aborta sem quebrar a página
-    if (!container) return;
-
-    // Garante que o container tenha dimensões antes de desenhar
-    // Se o Paged.js ainda estiver movendo coisas, clientWidth pode ser 0
-    const width = 160; 
-    const height = 160;
-    
-    // Limpeza completa (Idempotência)
-    d3.select(containerId).selectAll("*").remove();
-
-    // Configuração D3
-    const svg = d3.select(containerId).append("svg")
-      .attr("width", width).attr("height", height)
-      .style("display", "block").style("margin", "auto");
-
-    const projection = d3.geoOrthographic()
-      .scale(79).center([0, 0]).rotate([0, -30])
-      .translate([width / 2, height / 2]);
-
-    let path = d3.geoPath().projection(projection).pointRadius(1.5);
-    const CONNECTION_COLOR = "#08306b"; 
-
-    // Renderização
-    svg.append("circle").attr("cx", width/2).attr("cy", height/2)
-      .attr("r", projection.scale()).attr("fill", "#ADD8E6").attr("stroke", "none");
-
-    const mapGroup = svg.append("g"); 
-    const linesGroup = svg.append("g"); 
-    const particlesGroup = svg.append("g");
-    
-    let isAutoRotating = true; 
-    let isDragging = false; 
-    let activeLinks = []; 
-
-    // Função de atualização visual
-    function redraw() {
-        path = d3.geoPath().projection(projection).pointRadius(1.5);
-        svg.selectAll("path.country").attr("d", path);
-        svg.selectAll("path.connection").attr("d", path);
-        svg.selectAll("path.particle").attr("d", function(d) { return d.currentCoords ? path({type: "Point", coordinates: d.currentCoords}) : null; });
-    }
-
-    // Carregamento dos Dados
-    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(world) {
-        const countries = topojson.feature(world, world.objects.countries).features;
-        
-        const globePaths = mapGroup.selectAll("path.country").data(countries).enter().append("path")
-          .attr("class", "country").attr("d", path).attr("fill", "#FFFFFF") 
-          .attr("stroke", "#444").attr("stroke-width", "0.3px").style("cursor", "grab");
-
-        // Drag Behavior
-        const drag = d3.drag()
-            .on("start", function() { isDragging = true; isAutoRotating = false; d3.select(this).style("cursor", "grabbing"); })
-            .on("drag", function(event) {
-                const rotate = projection.rotate();
-                const sensitivity = 75;
-                const k = sensitivity / projection.scale();
-                projection.rotate([rotate[0] + event.dx * k, rotate[1] - event.dy * k]);
-                redraw(); 
-            })
-            .on("end", function() { isDragging = false; isAutoRotating = true; d3.select(this).style("cursor", "grab"); });
-        svg.call(drag);
-
-        // Hover Behavior
-        globePaths.on("mouseover", function() { if (!isDragging) { isAutoRotating = false; d3.select(this).attr("fill", "#bdd7e7"); } })
-                  .on("mouseout", function() { if (!isDragging) { isAutoRotating = true; d3.select(this).attr("fill", "#FFFFFF"); } });
-
-        // Limpeza de intervalos antigos (Memory Leak prevention)
-        if (window.globeDataInterval) clearInterval(window.globeDataInterval);
-        if (window.globeAnimTimer) window.globeAnimTimer.stop();
-
-        // Gerador de Tráfego
-        window.globeDataInterval = setInterval(function() {
-            const numNewLinks = 15; 
-            if (activeLinks.length > 25) activeLinks = activeLinks.slice(4);
-            for (let i = 0; i < numNewLinks; i++) {
-                const source = countries[Math.floor(Math.random() * countries.length)];
-                const target = countries[Math.floor(Math.random() * countries.length)];
-                if (source && target) {
-                    const s = d3.geoCentroid(source); const t = d3.geoCentroid(target);
-                    const linkData = { type: "LineString", coordinates: [s, t], source: s, target: t, id: Date.now()+Math.random(), currentCoords: s };
-                    activeLinks.push(linkData); createLinkAndParticle(linkData);
-                }
-            }
-        }, 1200);
-
-        function createLinkAndParticle(linkData) {
-            linesGroup.append("path").datum(linkData).attr("class", "connection").attr("d", path)
-                .attr("fill", "none").attr("stroke", CONNECTION_COLOR).attr("stroke-width", "2px") 
-                .attr("stroke-dasharray", "2,2").style("opacity", 0.5).style("pointer-events", "none")
-                .transition().duration(3000).style("opacity", 0).remove();
-
-            const particle = particlesGroup.append("path").datum(linkData).attr("class", "particle")
-                .attr("fill", CONNECTION_COLOR).attr("d", path({type: "Point", coordinates: linkData.source}))
-                .style("pointer-events", "none");
-            
-            const interpolator = d3.geoInterpolate(linkData.source, linkData.target);
-            particle.transition().duration(2000 + Math.random() * 1000).ease(d3.easeQuadInOut)
-                .tween("route", function(d) { return function(t) { d.currentCoords = interpolator(t); d3.select(this).attr("d", path({type: "Point", coordinates: d.currentCoords})); }; })
-                .remove();
-        }
-
-        // Animation Loop
-        const rotationSpeed = 0.3;
-        window.globeAnimTimer = d3.timer(function() {
-            if (!isDragging && isAutoRotating) {
-                const rotate = projection.rotate(); projection.rotate([rotate[0] + rotationSpeed, rotate[1]]); redraw();
-            }
-        });
-    }).catch(err => console.error("Erro carregando mapa:", err));
-}
-
-// 2. O SEGREDO TÉCNICO: Registro de Handler no Paged.js
-// Isso garante que o script só rode APÓS a diagramação da página estar completa.
-
-function registerPagedHook() {
-    if (typeof Paged !== 'undefined') {
-        // Cria uma classe de Handler customizada
-        class GlobeHandler extends Paged.Handler {
-            constructor(chunker, polisher, caller) {
-                super(chunker, polisher, caller);
-            }
-
-            // O evento 'afterPreview' dispara quando tudo está pronto visualmente
-            afterPreview(pages) {
-                console.log("Paged.js finalizado. Renderizando globo...");
-                renderGlobe();
-            }
-        }
-        // Registra o handler
-        Paged.registerHandlers(GlobeHandler);
-    } else {
-        // Fallback: Se por algum motivo Paged.js não carregar (ex: visualização mobile simples),
-        // usa o método padrão do navegador.
-        console.log("Modo sem paginação detectado.");
-        renderGlobe();
-    }
-}
-
-// 3. Inicialização
-// Aguarda o carregamento da janela para garantir que a biblioteca Paged.js esteja disponível
 window.addEventListener("load", function() {
-    // Pequeno delay técnico apenas para garantir que o script do Paged.js do RMarkdown foi processado
-    setTimeout(registerPagedHook, 100); 
+
+    // Configurações Globais
+    const CONFIG = {
+        width: 160,
+        height: 160,
+        containerId: "#interactive-globe",
+        connectionColor: "#08306b"
+    };
+
+    // Função Principal de Desenho
+    function drawGlobe() {
+        // 1. Verificações de Segurança
+        if (typeof d3 === 'undefined') return; // D3 ainda não carregou
+        const container = document.querySelector(CONFIG.containerId);
+        if (!container) return; // Container ainda não existe
+
+        // 2. Verifica se JÁ existe um globo desenhado para não duplicar
+        // Se já tiver um SVG dentro, não fazemos nada (a menos que esteja vazio)
+        if (container.querySelector("svg")) {
+            return; 
+        }
+
+        console.log("Desenhando globo...");
+
+        // 3. Limpeza e Setup
+        d3.select(CONFIG.containerId).selectAll("*").remove();
+        
+        const svg = d3.select(CONFIG.containerId).append("svg")
+            .attr("width", CONFIG.width).attr("height", CONFIG.height)
+            .style("display", "block").style("margin", "auto");
+
+        const projection = d3.geoOrthographic()
+            .scale(79).center([0, 0]).rotate([0, -30])
+            .translate([CONFIG.width / 2, CONFIG.height / 2]);
+
+        let path = d3.geoPath().projection(projection).pointRadius(1.5);
+
+        // 4. Elementos Visuais
+        svg.append("circle").attr("cx", CONFIG.width/2).attr("cy", CONFIG.height/2)
+            .attr("r", projection.scale()).attr("fill", "#ADD8E6").attr("stroke", "none");
+
+        const mapGroup = svg.append("g"); 
+        const linesGroup = svg.append("g"); 
+        const particlesGroup = svg.append("g");
+        
+        let isAutoRotating = true; 
+        let isDragging = false; 
+        let activeLinks = []; 
+
+        function redraw() {
+            path = d3.geoPath().projection(projection).pointRadius(1.5);
+            svg.selectAll("path.country").attr("d", path);
+            svg.selectAll("path.connection").attr("d", path);
+            svg.selectAll("path.particle").attr("d", function(d) { return d.currentCoords ? path({type: "Point", coordinates: d.currentCoords}) : null; });
+        }
+
+        // 5. Carregamento de Dados e Lógica
+        d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(world) {
+            const countries = topojson.feature(world, world.objects.countries).features;
+            
+            const globePaths = mapGroup.selectAll("path.country").data(countries).enter().append("path")
+                .attr("class", "country").attr("d", path).attr("fill", "#FFFFFF") 
+                .attr("stroke", "#444").attr("stroke-width", "0.3px").style("cursor", "grab");
+
+            // Drag
+            const drag = d3.drag()
+                .on("start", function() { isDragging = true; isAutoRotating = false; d3.select(this).style("cursor", "grabbing"); })
+                .on("drag", function(event) {
+                    const rotate = projection.rotate();
+                    const k = 75 / projection.scale();
+                    projection.rotate([rotate[0] + event.dx * k, rotate[1] - event.dy * k]);
+                    redraw(); 
+                })
+                .on("end", function() { isDragging = false; isAutoRotating = true; d3.select(this).style("cursor", "grab"); });
+            svg.call(drag);
+
+            // Hover
+            globePaths.on("mouseover", function() { if (!isDragging) { isAutoRotating = false; d3.select(this).attr("fill", "#bdd7e7"); } })
+                      .on("mouseout", function() { if (!isDragging) { isAutoRotating = true; d3.select(this).attr("fill", "#FFFFFF"); } });
+
+            // Tráfego de Dados
+            // Limpa intervalos globais para evitar vazamento de memória
+            if (window.globeInterval) clearInterval(window.globeInterval);
+            
+            window.globeInterval = setInterval(function() {
+                const numNewLinks = 15; 
+                if (activeLinks.length > 25) activeLinks = activeLinks.slice(4);
+                for (let i = 0; i < numNewLinks; i++) {
+                    const source = countries[Math.floor(Math.random() * countries.length)];
+                    const target = countries[Math.floor(Math.random() * countries.length)];
+                    if (source && target) {
+                        const s = d3.geoCentroid(source); const t = d3.geoCentroid(target);
+                        const linkData = { type: "LineString", coordinates: [s, t], source: s, target: t, id: Date.now()+Math.random(), currentCoords: s };
+                        activeLinks.push(linkData); createLinkAndParticle(linkData);
+                    }
+                }
+            }, 1200);
+
+            function createLinkAndParticle(linkData) {
+                linesGroup.append("path").datum(linkData).attr("class", "connection").attr("d", path)
+                    .attr("fill", "none").attr("stroke", CONFIG.connectionColor).attr("stroke-width", "2px") 
+                    .attr("stroke-dasharray", "2,2").style("opacity", 0.5).style("pointer-events", "none")
+                    .transition().duration(3000).style("opacity", 0).remove();
+
+                const particle = particlesGroup.append("path").datum(linkData).attr("class", "particle")
+                    .attr("fill", CONFIG.connectionColor).attr("d", path({type: "Point", coordinates: linkData.source}))
+                    .style("pointer-events", "none");
+                
+                const interpolator = d3.geoInterpolate(linkData.source, linkData.target);
+                particle.transition().duration(2000 + Math.random() * 1000).ease(d3.easeQuadInOut)
+                    .tween("route", function(d) { return function(t) { d.currentCoords = interpolator(t); d3.select(this).attr("d", path({type: "Point", coordinates: d.currentCoords})); }; })
+                    .remove();
+            }
+
+            // Animação
+            if (window.globeTimer) window.globeTimer.stop();
+            window.globeTimer = d3.timer(function() {
+                if (!isDragging && isAutoRotating) {
+                    const rotate = projection.rotate(); projection.rotate([rotate[0] + 0.3, rotate[1]]); redraw();
+                }
+            });
+        }).catch(err => console.error("Erro no globo:", err));
+    }
+
+    // --- LÓGICA DE PERSISTÊNCIA ---
+    
+    // 1. Tenta desenhar imediatamente
+    drawGlobe();
+
+    // 2. Verifica repetidamente se o globo sumiu (caso o pagedown o destrua)
+    // Verifica 5 vezes em momentos diferentes: 500ms, 1s, 2s, 3s, 5s
+    [500, 1000, 2000, 3000, 5000].forEach(delay => {
+        setTimeout(drawGlobe, delay);
+    });
+
 });
 </script>
 
