@@ -90,15 +90,33 @@ sup {
   padding-top: 0 !important; /* Remove teto para subir o globo */
 }
 
-/* Títulos da Lateral (Contato, Competências...) */
+/* Títulos da Barra Lateral */
 .aside h2 {
   font-family: "Playfair Display", serif;
   font-weight: 700 !important;
   font-size: 1.1rem;
   color: #000;
-  margin-top: 25px !important; /* Respiro de "duas linhas" */
+  
+  /* REDUZIDO: de 25px para 15px (Economia de ~30px no total) */
+  margin-top: 15px !important; 
   margin-bottom: 5px !important;
   padding-top: 0;
+}
+
+/* Espaço entre os grupos de habilidades */
+.skill-group {
+  /* REDUZIDO: de 12px para 8px */
+  margin-bottom: 8px !important;
+}
+
+/* Ajuste no espaço das listas */
+.aside ul {
+    margin-bottom: 8px !important;
+}
+
+/* Espaço entre itens da lista (Contato) */
+.aside li {
+    margin-bottom: 3px; /* Levemente mais compacto */
 }
 
 /* Título do Portfólio (Exceção para ficar perto do globo) */
