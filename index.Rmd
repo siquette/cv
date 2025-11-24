@@ -309,7 +309,8 @@ Experiência Profissional {data-icon=suitcase}
 print_section(position_data, 'industry_positions')
 ```
 
-Atividades extra curriculares {data-icon=laptop}
+Projetos e Pesquisa Aplicada {data-icon=laptop}
+
 --------------------------------------------------------------------------------
 
 ```{r}

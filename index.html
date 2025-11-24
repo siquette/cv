@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="author" content="rodrigo" />
-    <meta name="date" content="2025-11-23" />
+    <meta name="date" content="2025-11-24" />
     <title>Rodrigo Aroni Siquette CV</title>
 
     
@@ -31742,7 +31742,7 @@ width: unset;
       const anchors = content.querySelectorAll('a[href^="#"]:not([href*=":"])');
       for (const a of anchors) {
         const ref = a.getAttribute('href').replace(/^#/, '');
-        const element = content.getElementById(decodeURIComponent(ref));
+        const element = content.getElementById(ref);
         if (frontMatter.contains(element)) a.classList.add('front-matter-ref');
       }
 
@@ -31981,7 +31981,7 @@ width: unset;
       const tocAnchors = content.querySelectorAll('.toc a[href^="#"]:not([href*=":"]');
       for (const anchor of tocAnchors) {
         const ref = anchor.getAttribute('href').replace(/^#/, '');
-        const element = content.getElementById(decodeURIComponent(ref));
+        const element = content.getElementById(ref);
         if (element.classList.contains('chapter')) {
           anchor.classList.add('chapter-ref');
         }
@@ -32738,10 +32738,29 @@ Vamos bater um papo?
 <ul>
 <li>Cargo: Auxiliar administrativo</li>
 </ul>
+<p>Projetos e Pesquisa Aplicada {data-icon=laptop}</p>
+<hr />
 </div>
+<div id="especialista-em-inteligência-artificial" class="section level3">
+<h3>Especialista em Inteligência Artificial</h3>
+<p>Escola Politécnica da USP (Poli-USP)</p>
+<p>Universidade de São Paulo (USP)</p>
+<p>Atua - 2025</p>
+<ul>
+<li>Desenvolvimento de arquiteturas avançadas de <strong>Deep Learning</strong> e <strong>Visão Computacional</strong> (CNNs, Transfer Learning) aplicadas à identificação de padrões e reconstrução 3D. Implementação de soluções de <strong>NLP</strong> e IA Generativa utilizando arquiteturas Transformers (BERT, GPT) e técnicas de <strong>RAG (Retrieval-Augmented Generation)</strong> para otimização de LLMs.</li>
+<li>Domínio de frameworks de alto desempenho (TensorFlow, PyTorch) para construção de redes neurais customizadas e modelos preditivos complexos.</li>
+</ul>
 </div>
-<div id="atividades-extra-curriculares" class="section level2" data-icon="laptop">
-<h2>Atividades extra curriculares</h2>
+<div id="mba-em-data-science-e-analytics" class="section level3">
+<h3>MBA em Data Science e Analytics</h3>
+<p>ESALQ/USP</p>
+<p>Universidade de São Paulo (USP)</p>
+<p>2025 - 2023</p>
+<ul>
+<li>Foco em <strong>Estatística Espacial</strong> e Geoprocessamento para análise territorial avançada, integrando dados geográficos com modelagem preditiva. Aplicação de algoritmos de Machine Learning Supervisionado e Não Supervisionado (Clustering, PCA, Análise Fatorial) para estruturação de problemas de negócios.</li>
+<li>Sólida base em Engenharia de Dados e Big Data, com ênfase no rigor estatístico para tomada de decisão baseada em dados (Data-Driven).</li>
+</ul>
+</div>
 <div id="piscina-na-42-são-paulo" class="section level3">
 <h3>Piscina na 42 São Paulo</h3>
 <p>42 School Sao Paulo</p>
