@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="author" content="rodrigo" />
-    <meta name="date" content="2025-11-24" />
+    <meta name="date" content="2025-11-25" />
     <title>Rodrigo Aroni Siquette CV</title>
 
     
@@ -31742,7 +31742,7 @@ width: unset;
       const anchors = content.querySelectorAll('a[href^="#"]:not([href*=":"])');
       for (const a of anchors) {
         const ref = a.getAttribute('href').replace(/^#/, '');
-        const element = content.getElementById(ref);
+        const element = content.getElementById(decodeURIComponent(ref));
         if (frontMatter.contains(element)) a.classList.add('front-matter-ref');
       }
 
@@ -31981,7 +31981,7 @@ width: unset;
       const tocAnchors = content.querySelectorAll('.toc a[href^="#"]:not([href*=":"]');
       for (const anchor of tocAnchors) {
         const ref = anchor.getAttribute('href').replace(/^#/, '');
-        const element = content.getElementById(ref);
+        const element = content.getElementById(decodeURIComponent(ref));
         if (element.classList.contains('chapter')) {
           anchor.classList.add('chapter-ref');
         }
@@ -32384,12 +32384,12 @@ body {font-family: "Montserrat", sans-serif;font-weight: 400;line-height: 1.3;co
 <script>
 window.addEventListener("load", function() {
 
-    // Configurações Globais
     const CONFIG = {
-        width: 150,
-        height: 150,
+        width: 135,
+        height: 135,
         containerId: "#interactive-globe",
-        connectionColor: "#08306b"
+        connectionColor: "#08306b",
+        satelliteColor: "#000000"
     };
 
     function drawGlobe() {
@@ -32425,16 +32425,18 @@ window.addEventListener("load", function() {
         let isDragging = false;
         let activeLinks = [];
 
-        // ESTADO DO SATÉLITE (ISS)
+        // ESTADO DO SATÉLITE (SENTINEL-2)
         let satelliteState = {
-            theta: 0,           // Ângulo orbital atual (Anomalia verdadeira)
-            precession: 0       // Rotação da Terra sob a ISS
+            theta: 0,
+            precession: 0
         };
 
-        // CONSTANTES DA ISS
-        const INCLINATION = 51.6 * (Math.PI / 180); // 51.6 graus em radianos
-        const ORBIT_SPEED = 0.02; // Velocidade do satélite
-        const EARTH_ROTATION_UNDER_SAT = 0.002; // Precessão (Terra girando)
+        // --- PARÂMETROS ORBITAIS REAIS DO SENTINEL-2 ---
+        // Inclinação de 98.62 graus (Héliossíncrona/Polar)
+        // Isso fará ele ir quase até os polos (Norte/Sul)
+        const INCLINATION = 98.62 * (Math.PI / 180); 
+        const ORBIT_SPEED = 0.02; 
+        const EARTH_ROTATION_UNDER_SAT = 0.002;
 
         let satelliteObj = {
             type: "Feature",
@@ -32485,44 +32487,37 @@ window.addEventListener("load", function() {
                 .on("end", function() { isDragging = false; isAutoRotating = true; d3.select(this).style("cursor", "grab"); });
             svg.call(drag);
 
-            // --- LOOP DE ANIMAÇÃO ---
             if (window.globeTimer) window.globeTimer.stop();
             window.globeTimer = d3.timer(function() {
                 
-                // 1. Rotação do Globo (Visual)
                 if (!isDragging && isAutoRotating) {
                     const r = projection.rotate();
                     projection.rotate([r[0] + 0.3, r[1]]);
                 }
 
-                // 2. CÁLCULO DA ÓRBITA DA ISS
+                // CÁLCULO DA ÓRBITA POLAR (SENTINEL-2)
                 satelliteState.theta += ORBIT_SPEED;
                 satelliteState.precession += EARTH_ROTATION_UNDER_SAT;
 
-                // Matemática Esférica para Órbita Inclinada
-                // Latitude = arcsin(sin(Inclinação) * sin(Theta))
+                // Latitude atinge ~82 graus (quase nos polos)
                 const latRad = Math.asin(Math.sin(INCLINATION) * Math.sin(satelliteState.theta));
                 
-                // Longitude = atan2(cos(Inclinação) * sin(Theta), cos(Theta))
+                // Longitude com movimento retrógrado característico
                 const lonRad = Math.atan2(
                     Math.cos(INCLINATION) * Math.sin(satelliteState.theta), 
                     Math.cos(satelliteState.theta)
                 );
 
-                // Converte Radianos para Graus
                 const lat = latRad * (180 / Math.PI);
                 let lon = lonRad * (180 / Math.PI);
 
-                // Aplica a rotação da terra (satélite parece ir para oeste em relação ao mapa fixo)
                 lon -= (satelliteState.precession * (180 / Math.PI));
 
                 satelliteObj.geometry.coordinates = [lon, lat];
 
-                // 3. Renderiza
                 redraw();
             });
 
-            // Tráfego de Dados
             if (window.globeInterval) clearInterval(window.globeInterval);
             window.globeInterval = setInterval(function() {
                 const numNewLinks = 10; 
@@ -32740,28 +32735,8 @@ Vamos bater um papo?
 </ul>
 </div>
 </div>
-<div id="projetos-e-pesquisa-aplicada" class="section level2" data-icon="laptop">
-<h2>Projetos e Pesquisa Aplicada</h2>
-<div id="especialista-em-inteligência-artificial" class="section level3">
-<h3>Especialista em Inteligência Artificial</h3>
-<p>Escola Politécnica da USP (Poli-USP)</p>
-<p>Universidade de São Paulo (USP)</p>
-<p>Atua - 2025</p>
-<ul>
-<li>Desenvolvimento de arquiteturas avançadas de <strong>Deep Learning</strong> e <strong>Visão Computacional</strong> (CNNs, Transfer Learning) aplicadas à identificação de padrões e reconstrução 3D. Implementação de soluções de <strong>NLP</strong> e IA Generativa utilizando arquiteturas Transformers (BERT, GPT) e técnicas de <strong>RAG (Retrieval-Augmented Generation)</strong> para otimização de LLMs.</li>
-<li>Domínio de frameworks de alto desempenho (TensorFlow, PyTorch) para construção de redes neurais customizadas e modelos preditivos complexos.</li>
-</ul>
-</div>
-<div id="mba-em-data-science-e-analytics" class="section level3">
-<h3>MBA em Data Science e Analytics</h3>
-<p>ESALQ/USP</p>
-<p>Universidade de São Paulo (USP)</p>
-<p>2025 - 2023</p>
-<ul>
-<li>Foco em <strong>Estatística Espacial</strong> e Geoprocessamento para análise territorial avançada, integrando dados geográficos com modelagem preditiva. Aplicação de algoritmos de Machine Learning Supervisionado e Não Supervisionado (Clustering, PCA, Análise Fatorial) para estruturação de problemas de negócios.</li>
-<li>Sólida base em Engenharia de Dados e Big Data, com ênfase no rigor estatístico para tomada de decisão baseada em dados (Data-Driven).</li>
-</ul>
-</div>
+<div id="atividades-extra-curriculares" class="section level2" data-icon="laptop">
+<h2>Atividades extra curriculares</h2>
 <div id="piscina-na-42-são-paulo" class="section level3">
 <h3>Piscina na 42 São Paulo</h3>
 <p>42 School Sao Paulo</p>
