@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="author" content="rodrigo" />
-    <meta name="date" content="2025-11-25" />
+    <meta name="date" content="2025-11-27" />
     <title>Rodrigo Aroni Siquette CV</title>
 
     
@@ -32384,13 +32384,107 @@ body {font-family: "Montserrat", sans-serif;font-weight: 400;line-height: 1.3;co
 <script>
 window.addEventListener("load", function() {
 
+    // ==========================================================================
+    // 🎛️ PAINEL DE CONTROLE MESTRE
+    // Aqui você ajusta todo o comportamento visual e técnico do globo.
+    // ==========================================================================
     const CONFIG = {
-        width: 135,
-        height: 135,
-        containerId: "#interactive-globe",
-        connectionColor: "#08306b",
-        satelliteColor: "#000000"
+        // --- DIMENSÕES E CONTAINER ---
+        width: 147,                 // Largura do SVG em pixels (135px cabe na lateral)
+        height: 147,                // Altura do SVG em pixels
+        containerId: "#interactive-globe", // ID da Div onde o globo será desenhado
+        
+        // --- CONTROLE DE ZOOM E CÂMERA ---
+        initialScale: 66,           // Tamanho inicial do globo (Zoom padrão)
+        maxZoom: 4,                 // O quanto pode aproximar (4x)
+        minZoom: 1,                 // O quanto pode afastar (1x - tamanho original)
+
+        // --- PALETA "BLUEPRINT" (Estilo Técnico) ---
+        // Oceano: Azul Gelo Claro (Agora aplicado apenas na esfera)
+        oceanColor: "#CAF5FA",  
+        atmosphereScale: 1.0,
+        
+        // Nós (Pontos): Preto "Midnight" (Profundo e nítido)
+        nodeColor: "#0a192f",       
+        
+        // Linhas da Rede: Cinza Azulado Escuro (Conecta sem poluir)
+        lineColor: "#455a64",       
+        
+        // Fronteira dos Países: Um tom médio para definir a forma
+        borderColor: "#90a4ae",     
+        
+        // Destaques (Satélite e Tráfego)
+        satelliteColor: "#d50000",  // Vermelho Engenharia (Alto contraste)
+        trafficColor: "#ff6d00",    // Laranja Âmbar (Dados viajando)
+        mouseHoverColor: "#2962ff", // Azul Royal (Interação)
+
+        // --- ESPESSURAS (Ajustadas para a nova paleta) ---
+        lineThickness: 0.6,         // Mais fino para elegância
+        lineOpacity: 0.4,           // Transparência das linhas (0.0 a 1.0)
+        borderThickness: 0.8,       // Um pouco mais forte para definir o mapa no fundo claro
+        nodeSize: 0.9,              // Tamanho dos pontos discretos
+
+        // --- INTERATIVIDADE DO MOUSE (Efeito Radar) ---
+        mouseInteractionRadius: 10, // Distância em pixels para o mouse "ativar" um ponto
+        mouseHoverNodeSize: 2.5,    // Tamanho que o ponto fica quando ativado
+        
+        
+        // --- POSICIONAMENTO E ROTAÇÃO ---
+        rotationSpeed: 0.6,         // Velocidade de giro (0.1 lento, 0.5 rápido)
+        initialLatitude: 0,         // << 0 = EQUADOR (Centralizado). Aumente para ver o Norte.
+
+        // --- LOD (LEVEL OF DETAIL) - DEFINIÇÃO DE BORDAS ---
+        // Controla quantos pontos formam o contorno do país baseado no tamanho dele.
+        minAreaToDraw: 0.0005,      // Filtro de Ruído: Países menores que isso não aparecem (ex: ilhas minúsculas)
+        
+        // Distância entre pontos da borda (em Radianos):
+        // Valor MENOR = Mais pontos (Alta definição, mais pesado).
+        // Valor MAIOR = Menos pontos (Forma simplificada, mais leve).
+        lodHigh: 0.062,             // Para países GIGANTES (Brasil, Rússia, EUA)
+        lodMedium: 0.08,            // Para países MÉDIOS (França, Espanha)
+        lodLow: 0.4,                // Para países PEQUENOS (Portugal, Uruguai) - Apenas vértices principais
+        
+        // Limiares de Área para decidir qual LOD usar:
+        thresholdBig: 0.05,         // Se a área for maior que 0.05, usa lodHigh
+        thresholdMedium: 0.005,     // Se a área for maior que 0.005, usa lodMedium
+
+        // --- REDE HEXAGONAL (PREENCHIMENTO INTERNO) ---
+        // Tamanho dos hexágonos em Graus.
+        // Valor MENOR = Malha mais fechada (Muitos pontos).
+        // Valor MAIOR = Malha mais aberta (Poucos pontos).
+        gridSpacingBig: 6.3,        // Espaçamento para países Gigantes
+        gridSpacingMedium: 6.0,     // Espaçamento para países Médios
+        gridSpacingSmall: 4.5,      // Espaçamento para países Pequenos (precisa ser denso para preencher)
+        
+        // Distância máxima para conectar dois pontos (criar uma linha)
+        // Deve ser calibrado com o gridSpacing (aprox 0.12 para grids de 4 a 6)
+        connectionDistance: 0.12,   
+
+        // --- SATÉLITE (SENTINEL-2) ---
+        satelliteSpeed: 0.03,       // Velocidade da órbita (Incremento de ângulo por frame)
+        satelliteSize: "14px",      // Tamanho da fonte do emoji 🛰️
+
+        // --- TRAFEGO ---
+        trafficWidth: 3.0,          // Espessura da linha de tráfego (Mais grossa)
+        trafficInterval: 300        // << NOVA: Intervalo em ms entre pacotes (Maior = Menos tráfego)
     };
+    // ==========================================================================
+
+    // --- LISTA DE HUBS GLOBAIS (CIDADES REAIS PARA TRÁFEGO) ---
+    // Adicione ou remova cidades aqui para mudar as rotas dos dados
+    const MAJOR_CITIES = [
+        {name: "SP", coords: [-46.63, -23.55]}, 
+        {name: "NY", coords: [-74.00, 40.71]},
+        {name: "SF", coords: [-122.41, 37.77]}, 
+        {name: "LON", coords: [-0.12, 51.50]},
+        {name: "BER", coords: [13.40, 52.52]}, 
+        {name: "MOS", coords: [37.61, 55.75]},
+        {name: "TOK", coords: [139.69, 35.68]}, 
+        {name: "SHA", coords: [121.47, 31.23]},
+        {name: "SIN", coords: [103.81, 1.35]}, 
+        {name: "SYD", coords: [151.20, -33.86]},
+        {name: "DBX", coords: [55.27, 25.20]}
+    ];
 
     function drawGlobe() {
         if (typeof d3 === 'undefined') return;
@@ -32400,154 +32494,222 @@ window.addEventListener("load", function() {
 
         d3.select(CONFIG.containerId).selectAll("*").remove();
 
+        const centerX = CONFIG.width / 2;
+        const centerY = CONFIG.height / 2;
+
         const svg = d3.select(CONFIG.containerId).append("svg")
             .attr("width", CONFIG.width).attr("height", CONFIG.height)
-            .style("display", "block").style("margin", "auto");
+            .style("display", "block").style("margin", "auto")
+            .style("background", "none") 
+            .style("cursor", "move");
 
         const projection = d3.geoOrthographic()
-            .scale(66)
+            .scale(CONFIG.initialScale)
             .center([0, 0])
-            .rotate([0, -30])
-            .translate([CONFIG.width / 2, CONFIG.height / 2])
+            .rotate([0, CONFIG.initialLatitude * -1]) 
+            .translate([centerX, centerY])
             .clipAngle(90);
 
-        let path = d3.geoPath().projection(projection).pointRadius(1.5);
+        let path = d3.geoPath().projection(projection);
 
-        svg.append("circle").attr("cx", CONFIG.width/2).attr("cy", CONFIG.height/2)
-            .attr("r", projection.scale()).attr("fill", "#ADD8E6").attr("stroke", "none");
+        // Desenha o OCEANO (Agora seguro com a variável corrigida)
+        svg.append("circle")
+            .attr("cx", centerX)
+            .attr("cy", centerY)
+            .attr("r", projection.scale() * CONFIG.atmosphereScale)
+            .attr("fill", CONFIG.oceanColor)
+            .attr("stroke", "none");
 
-        const mapGroup = svg.append("g");
-        const linesGroup = svg.append("g");
-        const particlesGroup = svg.append("g");
-        const satelliteGroup = svg.append("g");
+        const mapGroup = svg.append("g");     
+        const networkGroup = svg.append("g"); 
+        const trafficGroup = svg.append("g"); 
+        const satelliteGroup = svg.append("g"); 
 
         let isAutoRotating = true;
         let isDragging = false;
-        let activeLinks = [];
+        let mousePos = null; 
 
-        // ESTADO DO SATÉLITE (SENTINEL-2)
-        let satelliteState = {
-            theta: 0,
-            precession: 0
-        };
-
-        // --- PARÂMETROS ORBITAIS REAIS DO SENTINEL-2 ---
-        // Inclinação de 98.62 graus (Héliossíncrona/Polar)
-        // Isso fará ele ir quase até os polos (Norte/Sul)
+        // Satélite
+        let satelliteState = { theta: 0, precession: 0 };
         const INCLINATION = 98.62 * (Math.PI / 180); 
-        const ORBIT_SPEED = 0.02; 
         const EARTH_ROTATION_UNDER_SAT = 0.002;
-
-        let satelliteObj = {
-            type: "Feature",
-            geometry: { type: "Point", coordinates: [0, 0] }
-        };
+        let satelliteObj = { type: "Feature", geometry: { type: "Point", coordinates: [0, 0] } };
 
         const satelliteIcon = satelliteGroup.append("text")
             .attr("class", "satellite-icon")
-            .attr("font-size", "14px")
+            .attr("font-size", CONFIG.satelliteSize)
             .attr("text-anchor", "middle")
             .attr("dominant-baseline", "central")
             .text("🛰️")
             .style("pointer-events", "none");
 
         function redraw() {
-            path = d3.geoPath().projection(projection).pointRadius(1.5);
-            svg.selectAll("path.country").attr("d", path);
-            svg.selectAll("path.connection").attr("d", path);
-            svg.selectAll("path.particle").attr("d", d => d.currentCoords ? path({type: "Point", coordinates: d.currentCoords}) : null);
+            path = d3.geoPath().projection(projection);
+            
+            svg.selectAll("path.country").attr("d", path).attr("stroke-width", CONFIG.borderThickness);
+            svg.selectAll("path.plexus-edge").attr("d", path).attr("stroke-width", CONFIG.lineThickness);
+
+            svg.selectAll("path.plexus-node").attr("d", function(d) {
+                const projected = projection(d.coordinates);
+                if (projected && mousePos) {
+                    const dx = projected[0] - mousePos[0];
+                    const dy = projected[1] - mousePos[1];
+                    if (Math.sqrt(dx*dx + dy*dy) < CONFIG.mouseInteractionRadius) {
+                        d3.select(this).attr("fill", CONFIG.mouseHoverColor);
+                        return path.pointRadius(CONFIG.mouseHoverNodeSize)({type:"Point", coordinates: d.coordinates});
+                    }
+                }
+                d3.select(this).attr("fill", CONFIG.nodeColor);
+                return path.pointRadius(CONFIG.nodeSize)({type:"Point", coordinates: d.coordinates});
+            });
+
+            svg.selectAll("path.traffic-line").attr("d", path);
+            svg.selectAll("path.traffic-particle").attr("d", d => d.currentCoords ? path({type: "Point", coordinates: d.currentCoords}) : null);
 
             const projected = projection(satelliteObj.geometry.coordinates);
             const isVisible = path(satelliteObj);
-
-            if (isVisible && projected) {
-                satelliteIcon
-                    .attr("transform", `translate(${projected[0]}, ${projected[1]})`)
-                    .style("display", "block");
-            } else {
-                satelliteIcon.style("display", "none");
-            }
+            if (isVisible && projected) satelliteIcon.attr("transform", `translate(${projected[0]}, ${projected[1]})`).style("display", "block");
+            else satelliteIcon.style("display", "none");
         }
+
+        svg.on("mousemove", function(event) { mousePos = d3.pointer(event); if (!isDragging) isAutoRotating = false; });
+        svg.on("mouseleave", function() { mousePos = null; if (!isDragging) isAutoRotating = true; });
+
+        const zoom = d3.zoom()
+            .scaleExtent([CONFIG.minZoom, CONFIG.maxZoom])
+            .on("zoom", (event) => {
+                isAutoRotating = false; 
+                const newScale = CONFIG.initialScale * event.transform.k;
+                projection.scale(newScale);
+                // AGORA FUNCIONA PORQUE CONFIG.atmosphereScale EXISTE
+                svg.selectAll("circle").attr("r", newScale * CONFIG.atmosphereScale); 
+                redraw();
+            });
+
+        svg.call(zoom).on("mousedown.zoom", null).on("touchstart.zoom", null).on("dblclick.zoom", null);
 
         d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(world) {
             const countries = topojson.feature(world, world.objects.countries).features;
+            const cleanCountries = countries.filter(f => d3.geoArea(f) > CONFIG.minAreaToDraw);
+
+            mapGroup.selectAll("path.country").data(cleanCountries).enter().append("path")
+                .attr("class", "country").attr("d", path).attr("fill", "none").attr("stroke", CONFIG.borderColor)
+                .attr("stroke-width", CONFIG.borderThickness).attr("stroke-opacity", 1);
             
-            mapGroup.selectAll("path.country").data(countries).enter().append("path")
-                .attr("class", "country").attr("d", path).attr("fill", "#FFFFFF") 
-                .attr("stroke", "#444").attr("stroke-width", "0.3px").style("cursor", "grab");
+            let nodes = []; let edges = [];
+
+            cleanCountries.forEach(feature => {
+                const area = d3.geoArea(feature);
+                const geometry = feature.geometry;
+                let borderDist, gridSpacing;
+                if (area > CONFIG.thresholdBig) { borderDist = CONFIG.lodHigh; gridSpacing = CONFIG.gridSpacingBig; } 
+                else if (area > CONFIG.thresholdMedium) { borderDist = CONFIG.lodMedium; gridSpacing = CONFIG.gridSpacingMedium; } 
+                else { borderDist = CONFIG.lodLow; gridSpacing = CONFIG.gridSpacingSmall; }
+                
+                function processRing(ring) {
+                    if (!ring.length) return;
+                    let lastNode = { type: "Point", coordinates: ring[0], isBorder: true };
+                    nodes.push(lastNode);
+                    for (let i = 1; i < ring.length; i++) {
+                        const currentCoords = ring[i];
+                        if (d3.geoDistance(lastNode.coordinates, currentCoords) > borderDist) {
+                            const currentNode = { type: "Point", coordinates: currentCoords, isBorder: true };
+                            nodes.push(currentNode);
+                            edges.push({ type: "LineString", coordinates: [lastNode.coordinates, currentNode.coordinates] });
+                            lastNode = currentNode; 
+                        }
+                    }
+                }
+                if (geometry.type === "Polygon") geometry.coordinates.forEach(processRing);
+                else if (geometry.type === "MultiPolygon") geometry.coordinates.forEach(p => p.forEach(processRing));
+
+                const bounds = d3.geoBounds(feature);
+                let startLat = Math.floor(bounds[0][1] / gridSpacing) * gridSpacing;
+                let startLon = Math.floor(bounds[0][0] / gridSpacing) * gridSpacing;
+                let row = 0;
+                for (let lat = startLat; lat < bounds[1][1] + gridSpacing; lat += gridSpacing) {
+                    row++;
+                    const offset = (row % 2 === 0) ? (gridSpacing / 2) : 0;
+                    for (let lon = startLon; lon < bounds[1][0] + gridSpacing; lon += gridSpacing) {
+                        const point = [lon + offset, lat];
+                        if (d3.geoContains(feature, point)) nodes.push({ type: "Point", coordinates: point, isBorder: false });
+                    }
+                }
+            });
+
+            const maxConnectionsPerNode = 6; 
+            for (let i = 0; i < nodes.length; i++) {
+                let connectionsCount = 0;
+                const limit = Math.min(nodes.length, i + 500); 
+                for (let j = i + 1; j < limit; j++) {
+                    if (nodes[i].isBorder && nodes[j].isBorder) continue;
+                    const d = d3.geoDistance(nodes[i].coordinates, nodes[j].coordinates);
+                    if (d < CONFIG.connectionDistance) {
+                        edges.push({ type: "LineString", coordinates: [nodes[i].coordinates, nodes[j].coordinates] });
+                        connectionsCount++;
+                        if (connectionsCount >= maxConnectionsPerNode) break; 
+                    }
+                }
+            }
+
+            networkGroup.selectAll("path.plexus-edge").data(edges).enter().append("path")
+                .attr("class", "plexus-edge").attr("d", path).attr("fill", "none")
+                .attr("stroke", CONFIG.lineColor).attr("stroke-width", CONFIG.lineThickness).attr("opacity", CONFIG.lineOpacity);
+
+            networkGroup.selectAll("path.plexus-node").data(nodes).enter().append("path")
+                .attr("class", "plexus-node").attr("d", path.pointRadius(CONFIG.nodeSize))
+                .attr("fill", CONFIG.nodeColor).attr("opacity", 0.9);
 
             const drag = d3.drag()
                 .on("start", function() { isDragging = true; isAutoRotating = false; d3.select(this).style("cursor", "grabbing"); })
                 .on("drag", function(event) {
                     const rotate = projection.rotate();
-                    const k = 75 / projection.scale();
+                    const k = 75 / projection.scale(); 
                     projection.rotate([rotate[0] + event.dx * k, rotate[1] - event.dy * k]);
                     redraw(); 
                 })
-                .on("end", function() { isDragging = false; isAutoRotating = true; d3.select(this).style("cursor", "grab"); });
+                .on("end", function() { isDragging = false; isAutoRotating = true; d3.select(this).style("cursor", "move"); });
             svg.call(drag);
-
-            if (window.globeTimer) window.globeTimer.stop();
-            window.globeTimer = d3.timer(function() {
-                
-                if (!isDragging && isAutoRotating) {
-                    const r = projection.rotate();
-                    projection.rotate([r[0] + 0.3, r[1]]);
-                }
-
-                // CÁLCULO DA ÓRBITA POLAR (SENTINEL-2)
-                satelliteState.theta += ORBIT_SPEED;
-                satelliteState.precession += EARTH_ROTATION_UNDER_SAT;
-
-                // Latitude atinge ~82 graus (quase nos polos)
-                const latRad = Math.asin(Math.sin(INCLINATION) * Math.sin(satelliteState.theta));
-                
-                // Longitude com movimento retrógrado característico
-                const lonRad = Math.atan2(
-                    Math.cos(INCLINATION) * Math.sin(satelliteState.theta), 
-                    Math.cos(satelliteState.theta)
-                );
-
-                const lat = latRad * (180 / Math.PI);
-                let lon = lonRad * (180 / Math.PI);
-
-                lon -= (satelliteState.precession * (180 / Math.PI));
-
-                satelliteObj.geometry.coordinates = [lon, lat];
-
-                redraw();
-            });
 
             if (window.globeInterval) clearInterval(window.globeInterval);
             window.globeInterval = setInterval(function() {
-                const numNewLinks = 10; 
-                if (activeLinks.length > 15) activeLinks = activeLinks.slice(4);
-                for (let i = 0; i < numNewLinks; i++) {
-                    const source = countries[Math.floor(Math.random() * countries.length)];
-                    const target = countries[Math.floor(Math.random() * countries.length)];
-                    if (source && target) {
-                        const s = d3.geoCentroid(source); const t = d3.geoCentroid(target);
-                        const linkData = { type: "LineString", coordinates: [s, t], source: s, target: t, id: Date.now()+Math.random(), currentCoords: s };
-                        activeLinks.push(linkData); createPacket(linkData);
-                    }
-                }
-            }, 1500);
+                const source = MAJOR_CITIES[Math.floor(Math.random() * MAJOR_CITIES.length)];
+                let target = MAJOR_CITIES[Math.floor(Math.random() * MAJOR_CITIES.length)];
+                while (source.name === target.name) { target = MAJOR_CITIES[Math.floor(Math.random() * MAJOR_CITIES.length)]; }
+                launchDataPacket(source.coords, target.coords);
+            }, CONFIG.trafficInterval); 
 
-            function createPacket(linkData) {
-                linesGroup.append("path").datum(linkData).attr("class", "connection").attr("d", path)
-                    .attr("fill", "none").attr("stroke", CONFIG.connectionColor).attr("stroke-width", "1.5px") 
-                    .attr("stroke-dasharray", "2,2").style("opacity", 0.3).style("pointer-events", "none")
-                    .transition().duration(3000).style("opacity", 0).remove();
+            function launchDataPacket(startCoords, endCoords) {
+                const route = { type: "LineString", coordinates: [startCoords, endCoords] };
+                trafficGroup.append("path").datum(route).attr("class", "traffic-line").attr("d", path)
+                    .attr("fill", "none").attr("stroke", CONFIG.trafficColor).attr("stroke-width", CONFIG.trafficWidth + "px").attr("stroke-dasharray", "3,3")
+                    .style("opacity", 0.8).style("pointer-events", "none").transition().duration(2500).style("opacity", 0).remove();
 
-                const particle = particlesGroup.append("path").datum(linkData).attr("class", "particle")
-                    .attr("fill", CONFIG.connectionColor).attr("d", path({type: "Point", coordinates: linkData.source}))
+                const particle = trafficGroup.append("path").datum({ type: "Point", currentCoords: startCoords })
+                    .attr("class", "traffic-particle").attr("fill", CONFIG.trafficColor).attr("d", path.pointRadius(2.0))
                     .style("pointer-events", "none");
-                
-                const interpolator = d3.geoInterpolate(linkData.source, linkData.target);
+
+                const interpolator = d3.geoInterpolate(startCoords, endCoords);
                 particle.transition().duration(2000).ease(d3.easeQuadInOut)
-                    .tween("route", function(d) { return function(t) { d.currentCoords = interpolator(t); d3.select(this).attr("d", path({type: "Point", coordinates: d.currentCoords})); }; })
-                    .remove();
+                    .tween("travel", function(d) { return function(t) { d.currentCoords = interpolator(t); }; }).remove();
             }
+
+            if (window.globeTimer) window.globeTimer.stop();
+            window.globeTimer = d3.timer(function() {
+                if (isAutoRotating) {
+                    const r = projection.rotate();
+                    projection.rotate([r[0] + CONFIG.rotationSpeed, r[1]]);
+                }
+                satelliteState.theta += CONFIG.satelliteSpeed;
+                satelliteState.precession += EARTH_ROTATION_UNDER_SAT;
+                const latRad = Math.asin(Math.sin(INCLINATION) * Math.sin(satelliteState.theta));
+                const lonRad = Math.atan2(Math.cos(INCLINATION) * Math.sin(satelliteState.theta), Math.cos(satelliteState.theta));
+                const lat = latRad * (180 / Math.PI);
+                let lon = lonRad * (180 / Math.PI);
+                lon -= (satelliteState.precession * (180 / Math.PI));
+                satelliteObj.geometry.coordinates = [lon, lat];
+                redraw();
+            });
 
         }).catch(err => console.error(err));
     }
